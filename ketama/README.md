@@ -92,3 +92,4 @@ item=10000时
 - [【并发编程】使用BlockingQueue实现<多生产者，多消费者>](http://www.cnblogs.com/ssslinppp/p/6279796.html)   
 - [五分钟理解一致性哈希算法(consistent hashing)](http://blog.csdn.net/cywosp/article/details/23397179)   
 - [一致性哈希算法的理解与实践](https://yikun.github.io/2016/06/09/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%AE%9E%E8%B7%B5/)    
+- [KetamaConsistentHash.java包括动态添加和删除node](https://gist.github.com/linux-china/7817485)
