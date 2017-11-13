@@ -1,6 +1,66 @@
 # 一致性Hash算法
 是一种分布式算法，常用于负载均衡
 
+# 实现思路
+使用TreeMap实现
+
+## 节点分配
+```
+ /**
+ * 一致性hash算法，节点分配;
+ *
+ * @param nodes      node集合
+ * @param alg        Hash算法
+ * @param nodeCopies 虚拟节点个数，每一个node都对应nodeCopies个虚拟节点
+ */
+public KetamaNodeLocator(Collection<T> nodes, HashAlgorithm alg, int nodeCopies) {
+    hashAlg = alg;
+    ketamaNodes = new TreeMap<Long, T>();
+    numReps = nodeCopies;
+    for (T node : nodes) {
+        for (int i = 0; i < numReps / 4; i++) {
+            byte[] digest = hashAlg.computeMd5(node.toString() + i);
+            for (int h = 0; h < 4; h++) {
+                long m = hashAlg.hash(digest, h);
+                ketamaNodes.put(m, node);
+            }
+        }
+    }
+}
+```
+
+## 节点查询
+```
+ /**
+ * 使用TreeMap来实现顺时针查询最近node
+ *
+ * @param hash
+ * @return
+ */
+private T getNodeForKey(long hash) {
+    if (ketamaNodes.isEmpty()) {
+        return null;
+    }
+    if (!ketamaNodes.containsKey(hash)) {
+        //Returns the least key greater than or equal to the given key, or null if there is no such key.
+        Object ceilValue = ((TreeMap<Long, T>) ketamaNodes).ceilingKey(hash);
+        if (ceilValue != null) {
+            try {
+                hash = Long.valueOf(ceilValue.toString());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                hash = 0;
+            }
+        }
+        if (ceilValue == null || hash == 0) { // 找不到时，取第一个元素，构成一个闭环集合
+            hash = ketamaNodes.firstKey();
+        }
+    }
+    return ketamaNodes.get(hash);
+}    
+```
+
+
 ## 测试
 测试代码：
 KetamaNodeLocatorTest.java
