@@ -1,6 +1,66 @@
 # 一致性Hash算法
 是一种分布式算法，常用于负载均衡
 
+# 实现思路
+使用TreeMap实现
+
+## 节点分配
+```
+ /**
+ * 一致性hash算法，节点分配;
+ *
+ * @param nodes      node集合
+ * @param alg        Hash算法
+ * @param nodeCopies 虚拟节点个数，每一个node都对应nodeCopies个虚拟节点
+ */
+public KetamaNodeLocator(Collection<T> nodes, HashAlgorithm alg, int nodeCopies) {
+    hashAlg = alg;
+    ketamaNodes = new TreeMap<Long, T>();
+    numReps = nodeCopies;
+    for (T node : nodes) {
+        for (int i = 0; i < numReps / 4; i++) {
+            byte[] digest = hashAlg.computeMd5(node.toString() + i);
+            for (int h = 0; h < 4; h++) {
+                long m = hashAlg.hash(digest, h);
+                ketamaNodes.put(m, node);
+            }
+        }
+    }
+}
+```
+
+## 节点查询
+```
+ /**
+ * 使用TreeMap来实现顺时针查询最近node
+ *
+ * @param hash
+ * @return
+ */
+private T getNodeForKey(long hash) {
+    if (ketamaNodes.isEmpty()) {
+        return null;
+    }
+    if (!ketamaNodes.containsKey(hash)) {
+        //Returns the least key greater than or equal to the given key, or null if there is no such key.
+        Object ceilValue = ((TreeMap<Long, T>) ketamaNodes).ceilingKey(hash);
+        if (ceilValue != null) {
+            try {
+                hash = Long.valueOf(ceilValue.toString());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                hash = 0;
+            }
+        }
+        if (ceilValue == null || hash == 0) { // 找不到时，取第一个元素，构成一个闭环集合
+            hash = ketamaNodes.firstKey();
+        }
+    }
+    return ketamaNodes.get(hash);
+}    
+```
+
+
 ## 测试
 测试代码：
 KetamaNodeLocatorTest.java
@@ -92,3 +152,4 @@ item=10000时
 - [【并发编程】使用BlockingQueue实现<多生产者，多消费者>](http://www.cnblogs.com/ssslinppp/p/6279796.html)   
 - [五分钟理解一致性哈希算法(consistent hashing)](http://blog.csdn.net/cywosp/article/details/23397179)   
 - [一致性哈希算法的理解与实践](https://yikun.github.io/2016/06/09/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%AE%9E%E8%B7%B5/)    
+- [KetamaConsistentHash.java包括动态添加和删除node](https://gist.github.com/linux-china/7817485)
