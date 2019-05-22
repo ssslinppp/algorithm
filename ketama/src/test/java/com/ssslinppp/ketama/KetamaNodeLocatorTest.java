@@ -7,14 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Description：<br/>
- * User: liulin <br/>
- * Date: 2017/11/7 <br/>
- * Time: 14:28 <br/>
- * Email: liulin@cmss.chinamobile.com <br/>
- * To change this template use File | Settings | File Templates.
- */
 public class KetamaNodeLocatorTest {
 
     @Test

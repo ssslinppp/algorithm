@@ -1,12 +1,6 @@
 package com.github.ssslinppp.hexEncode;
 
 /**
- * Description：<br/>
- * User: liulin <br/>
- * Date: 2017/11/22 <br/>
- * Time: 11:05 <br/>
- * Email: liulin@cmss.chinamobile.com <br/>
- * To change this template use File | Settings | File Templates.
  */
 public class HexBytesUtilsTest {
     @org.junit.Test

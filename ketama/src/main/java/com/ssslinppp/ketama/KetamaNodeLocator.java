@@ -8,10 +8,6 @@ import java.util.TreeMap;
  * 当node数发生变化时，如何保证尽量少引起迁移呢？
  * 即当增加或者删除节点时，对于大多数item，保证原来分配到的某个node，现在仍然应该分配到那个node，将数据迁移量的降到最低
  * <p>
- * User: liulin <br/>
- * Date: 2017/11/7 <br/>
- * Time: 14:27 <br/>
- * Email: liulin@cmss.chinamobile.com <br/>
  * To change this template use File | Settings | File Templates.
  */
 public final class KetamaNodeLocator<T> {

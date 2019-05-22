@@ -4,14 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Description：<br/>
- * User: liulin <br/>
- * Date: 2017/11/7 <br/>
- * Time: 14:26 <br/>
- * Email: liulin@cmss.chinamobile.com <br/>
- * To change this template use File | Settings | File Templates.
- */
 public enum HashAlgorithm {
     KETAMA_HASH;
     
